@@ -1,0 +1,19 @@
+import { Award, ChevronDown } from 'lucide-react';
+import { portfolio } from '@/data/portfolio';
+import { ExternalLink, SectionHeading } from './ui';
+function DifficultyChart() {
+  const { total, difficulties } = portfolio.leetcode;
+  const circumference = 2 * Math.PI * 78;
+  let offset = 0;
+  return <div className="difficulty-chart"><div className="donut"><svg viewBox="0 0 200 200" role="img" aria-label={total + ' problems solved: ' + difficulties.map(d => d.value+' '+d.label).join(', ')}><circle cx="100" cy="100" r="78" fill="none" stroke="var(--border)" strokeWidth="11" />{difficulties.map((d,i) => {const length=d.value/total*circumference;const position=offset;offset+=length;return <circle key={d.label} cx="100" cy="100" r="78" fill="none" stroke={'var(--chart-'+i+')'} strokeWidth="11" strokeDasharray={(length-5)+' '+(circumference-length+5)} strokeDashoffset={-position} transform="rotate(-90 100 100)" />;})}</svg><div className="donut-center"><strong>{total}</strong><span>problems solved</span></div></div><dl className="difficulty-legend">{difficulties.map((d,i) => <div key={d.label}><dt><i style={{background:'var(--chart-'+i+')'}} />{d.label}</dt><dd>{d.value}</dd></div>)}</dl></div>;
+}
+export function LeetCodeStats() {
+  const l=portfolio.leetcode;
+  return <section id="leetcode" className="practice-section" aria-label="LeetCode and problem solving"><div className="shell section"><div className="heading-row"><SectionHeading number="04" label="DELIBERATE PRACTICE" title="Problem solving, quantified." description="Algorithms, databases, and the habit of working through hard questions." /><ExternalLink href={l.url} className="text-link">View LeetCode</ExternalLink></div>
+    <div className="practice-grid"><div className="practice-primary"><div className="panel-head"><span className="mono">PROBLEM DISTRIBUTION</span><span className="mono">{l.handle}</span></div><DifficultyChart /><div className="practice-key-stats"><div><strong>{l.acceptance}</strong><span>Overall acceptance</span></div><div><strong>{l.rating}</strong><span>Contest rating · {l.contests} contests</span></div></div></div>
+      <div className="practice-secondary"><h3>Practice in the tools I use.</h3><p>From algorithmic reasoning to working with tabular data.</p><div className="language-chart" role="group" aria-label="Language-specific solved counts">{l.languages.map(language => <div className="language-row" key={language.label}><div><span>{language.label}</span><strong>{language.value}</strong></div><div className="bar-track" aria-hidden="true"><span style={{width:(language.value/l.languages[0].value*100)+'%'}} /></div></div>)}</div><p className="chart-note">Language counts are separate from the unique-problem total and may overlap.</p><div className="activity-row"><div><strong>{l.submissions.toLocaleString('en-US')}</strong><span>Yearly submissions</span></div><div><strong>{l.activeDays}</strong><span>Active days</span></div><div><strong>{l.maxStreak}</strong><span>Max day streak</span></div></div></div>
+    </div>
+    <div className="badge-row"><span className="mono">MILESTONES</span>{l.badges.map((b,i)=><span className="badge" key={b}><Award size={19} strokeWidth={1.5} aria-hidden="true" />{b}{i===1 && <small>Latest</small>}</span>)}</div>
+    <details className="practice-details"><summary>Explore topics & contest snapshot <ChevronDown size={16} aria-hidden="true" /></summary><div className="practice-details-body"><dl className="topic-list">{l.topics.map(t=><div key={t.label}><dt>{t.label}</dt><dd>×{t.value}</dd></div>)}</dl><dl className="rank-list"><div><dt>Profile rank</dt><dd>{l.rank}</dd></div><div><dt>Contest global rank</dt><dd>{l.contestGlobalRank}</dd></div><div><dt>Contest top percentage</dt><dd>{l.contestTop}</dd></div></dl></div></details><p className="snapshot-note mono">{l.snapshot}. Figures are not live.</p>
+  </div></section>;
+}

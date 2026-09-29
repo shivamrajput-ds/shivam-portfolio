@@ -1,0 +1,1 @@
+export default function NotFound() { return <main className="shell error-page"><p className="eyebrow">404 / NOT FOUND</p><h1>This page isn’t here.</h1><p>Return to Shivam’s portfolio to explore the work.</p><a className="button primary" href="/">Back to portfolio</a></main>; }
